@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.ts',
+  entry: './src/app/main.ts',
   devServer: {
     contentBase: './dist'
   },
@@ -16,7 +16,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
-      { from: 'src/levels', to: 'levels' },
+      { from: 'src/app/levels', to: 'levels' },
     ]),
     new HtmlWebpackPlugin({
       template: './src/index.html'

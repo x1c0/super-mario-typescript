@@ -1,7 +1,7 @@
 import { SpriteSheet } from './sprite-sheet';
-import { loadImage } from './loaders';
-import backgrounds from './img/tileset.png';
-import characters from './img/characters.gif';
+import { loadImage } from '../loaders';
+import backgrounds from '../../images/tileset.png';
+import characters from '../../images/characters.gif';
 
 export function loadMarioSprite() {
   return loadImage(characters)
