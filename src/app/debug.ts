@@ -10,11 +10,13 @@ export function setupMouseControls(canvas: HTMLCanvasElement, entity: Entity, ca
       if (event.buttons === 1) {
         entity.velocity.set(0, 0);
         entity.position.set(
-          event.offsetX - camera.position.x,
-          event.offsetY - camera.position.y);
-      } else if (event.buttons === 2 && lastEvent && lastEvent.buttons === 2 &&
+          event.offsetX + camera.position.x,
+          event.offsetY + camera.position.y);
+      } else if (event.buttons === 2 &&
+        lastEvent &&
+        lastEvent.buttons === 2 &&
         lastEvent.type === 'mousemove') {
-        camera.position.x -= event.offsetX - lastEvent.offsetX;
+        camera.position.x -= (event.offsetX - lastEvent.offsetX);
       }
       lastEvent = event;
     });

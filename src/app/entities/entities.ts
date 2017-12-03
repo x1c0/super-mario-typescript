@@ -1,5 +1,5 @@
-import { loadMarioSprite } from '../sprites/sprites';
-import { SpriteSheet } from '../sprites/sprite-sheet';
+import { loadMarioSprite } from '../loaders';
+import { SpriteSheet } from '../sprite-sheet';
 import { Entity } from './entity';
 import { Jump } from '../traits/jump';
 import { Go } from '../traits/go';

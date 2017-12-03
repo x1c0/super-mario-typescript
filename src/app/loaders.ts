@@ -1,13 +1,16 @@
 import { Level } from './levels/level';
 import { createBackgroundLayer, createSpriteLayer } from './layers/layers';
-import { loadBackgroundSprites } from './sprites/sprites';
+import { SpriteSheet } from './sprite-sheet';
+import characters from '../images/characters.gif';
 
 export interface Background {
   tile: string,
+  type: string,
   ranges: [[number, number, number, number]]
 }
 
 export interface LevelSpec {
+  spriteSheet: string,
   backgrounds: Background[]
 }
 
@@ -34,7 +37,8 @@ function createTiles(level: any, backgrounds: Background[]) {
     for (let x = xStart; x < xEnd; x++) {
       for (let y = yStart; y < yEnd; y++) {
         level.tiles.set(x, y, {
-          name: background.tile
+          name: background.tile,
+          type: background.type
         });
       }
     }
@@ -46,7 +50,7 @@ function createTiles(level: any, backgrounds: Background[]) {
         const [xStar, xLen, yStart, yLen] = range;
         applyRange(background, xStar, xLen, yStart, yLen);
       } else if (range.length === 3) {
-        const [xStar,xLen, yStart] = range;
+        const [xStar, xLen, yStart] = range;
         applyRange(background, xStar, xLen, yStart, 1);
       } else if (range.length === 2) {
         const [xStar, yStart] = range;
@@ -56,21 +60,51 @@ function createTiles(level: any, backgrounds: Background[]) {
   });
 }
 
+export function loadSpriteSheet(name: string) {
+  return fetch(`/sprites/${name}.json`)
+    .then(response => response.json())
+    .then((sheetSpec: any) => Promise.all([
+      sheetSpec,
+      loadImage(sheetSpec.imageURL)
+    ]))
+    .then(([sheetSpec, image]) => {
+      const sprites = new SpriteSheet(image, sheetSpec.tileWidth, sheetSpec.tileHeight);
+
+      sheetSpec.tiles.forEach((tileSpec: any) => {
+        sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
+      });
+
+      return sprites;
+    });
+}
+
+export function loadMarioSprite() {
+  return loadImage(characters)
+    .then((image: HTMLImageElement) => {
+      const sprites = new SpriteSheet(image, 16, 16);
+      sprites.define('idle', 276, 44, 16, 16);
+      return sprites;
+    });
+}
+
 export function loadLevel(levelName: string): Promise<Level> {
-  return Promise.all([
-    loadLevelSpec(levelName),
-    loadBackgroundSprites()
-  ]).then(([levelSpec, backgroundSprites]) => {
-    const level = new Level();
+  return loadLevelSpec(levelName)
+    .then((levelSpec: LevelSpec) =>
+      Promise.all([
+        levelSpec,
+        loadSpriteSheet(levelSpec.spriteSheet)
+      ]))
+    .then(([levelSpec, backgroundSprites]) => {
+      const level = new Level();
 
-    createTiles(level, levelSpec.backgrounds);
+      createTiles(level, levelSpec.backgrounds);
 
-    const backgroundLayer = createBackgroundLayer(level, backgroundSprites);
-    level.compositor.addLayer(backgroundLayer);
+      const backgroundLayer = createBackgroundLayer(level, backgroundSprites);
+      level.compositor.addLayer(backgroundLayer);
 
-    const spriteLayer = createSpriteLayer(level.entities);
-    level.compositor.addLayer(spriteLayer);
+      const spriteLayer = createSpriteLayer(level.entities);
+      level.compositor.addLayer(spriteLayer);
 
-    return level;
-  });
+      return level;
+    });
 }

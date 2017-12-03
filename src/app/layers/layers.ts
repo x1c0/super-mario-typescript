@@ -1,18 +1,45 @@
-import { SpriteSheet } from '../sprites/sprite-sheet';
+import { SpriteSheet } from '../sprite-sheet';
 import { Entity } from '../entities/entity';
 import { Level } from '../levels/level';
 import { Camera } from '../camera';
 import { CanvasHelper } from '../canvas-helper';
 
 export function createBackgroundLayer(level: Level, backgroundSprites: SpriteSheet): (context: CanvasRenderingContext2D, camera: Camera) => void {
-  const canvasHelper = new CanvasHelper(2048, 240);
+  const canvasHelper = new CanvasHelper(256 + 16, 240);
+  const resolver = level.tileCollider.tiles;
+  let startIndex: number;
+  let endIndex: number;
 
-  level.tiles.forEachTile((tile: any, x: number, y: number) => {
-    backgroundSprites.drawTile(tile.name, canvasHelper.context, x, y);
-  });
+  function redraw(drawFrom: number, drawTo: number) {
+
+    if (drawFrom === startIndex && drawTo === endIndex) {
+      return;
+    }
+
+    startIndex = drawFrom;
+    endIndex = drawTo;
+
+    for (let x = startIndex; x <= endIndex; x++) {
+      const col = level.tiles.grid[x];
+      if (col) {
+        col.forEach((tile: any, y: number) => {
+          backgroundSprites.drawTile(tile.name, canvasHelper.context, x - startIndex, y);
+        });
+      }
+    }
+  }
 
   return function drawLayer(context: CanvasRenderingContext2D, camera: Camera) {
-    context.drawImage(canvasHelper.buffer, -camera.position.x, -camera.position.y);
+    const drawWith = resolver.toIndex(camera.size.x);
+    const drawFrom = resolver.toIndex(camera.position.x);
+    const drawTo = drawFrom + drawWith;
+
+    redraw(drawFrom, drawTo);
+
+    context.drawImage(
+      canvasHelper.buffer,
+      -camera.position.x % 16,
+      -camera.position.y);
   }
 }
 
@@ -70,4 +97,16 @@ export function createCollisionLayer(level: Level): (context: CanvasRenderingCon
     resolvedTiles.length = 0;
   }
 
+}
+
+export function createCameraLayer(cameraToDraw: Camera): (context: CanvasRenderingContext2D, camera: Camera) => void {
+  return function drawLayer(context: CanvasRenderingContext2D, fromCamera: Camera) {
+    context.strokeStyle = 'purple';
+    context.rect(
+      cameraToDraw.position.x - fromCamera.position.x,
+      cameraToDraw.position.y - fromCamera.position.y,
+      cameraToDraw.size.x,
+      cameraToDraw.size.y);
+    context.stroke();
+  }
 }

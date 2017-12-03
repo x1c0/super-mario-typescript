@@ -1,4 +1,4 @@
-import { CanvasHelper } from '../canvas-helper';
+import { CanvasHelper } from './canvas-helper';
 
 export class SpriteSheet {
 

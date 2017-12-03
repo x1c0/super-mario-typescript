@@ -3,7 +3,7 @@ import { loadLevel } from './loaders';
 import { createMario } from './entities/entities';
 import { startTimer } from './timer';
 import { setupKeyboard } from './input';
-import { createCollisionLayer } from './layers/layers';
+import { createCameraLayer, createCollisionLayer } from './layers/layers';
 import { Camera } from './camera';
 import { setupMouseControls } from './debug';
 
@@ -17,15 +17,16 @@ Promise.all([
   .then(([mario, level]) => {
 
     const camera = new Camera();
-
     mario.position.set(64, 64);
+
+    level.compositor.addLayer(createCollisionLayer(level));
+    level.compositor.addLayer(createCameraLayer(camera));
     level.entities.add(mario);
 
     const input = setupKeyboard(mario);
     input.listenTo(window);
 
     setupMouseControls(canvas, mario, camera);
-    level.compositor.addLayer(createCollisionLayer(level));
 
     const update = function update(deltaTime: number) {
       level.update(deltaTime);

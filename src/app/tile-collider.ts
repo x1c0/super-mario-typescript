@@ -25,7 +25,7 @@ export class TileCollider {
       entity.position.y, entity.position.y + entity.size.y);
 
     matches.forEach((match: any) => {
-      if (match.tile.name !== 'ground') {
+      if (match.tile.type !== 'ground') {
         return;
       }
 
@@ -58,7 +58,7 @@ export class TileCollider {
       y, y);
 
     matches.forEach((match: any) => {
-      if (match.tile.name !== 'ground') {
+      if (match.tile.type !== 'ground') {
         return;
       }
 
