@@ -19,7 +19,7 @@ Promise.all([
     const camera = new Camera();
     mario.position.set(64, 64);
 
-    level.compositor.addLayer(createCollisionLayer(level));
+    // debug layer -> level.compositor.addLayer(createCollisionLayer(level));
     level.compositor.addLayer(createCameraLayer(camera));
     level.entities.add(mario);
 

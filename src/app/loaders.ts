@@ -1,7 +1,7 @@
 import { Level } from './levels/level';
 import { createBackgroundLayer, createSpriteLayer } from './layers/layers';
 import { SpriteSheet } from './sprite-sheet';
-import characters from '../images/characters.gif';
+import characters from './sprites/characters.gif';
 
 export interface Background {
   tile: string,
@@ -70,19 +70,18 @@ export function loadSpriteSheet(name: string) {
     .then(([sheetSpec, image]) => {
       const sprites = new SpriteSheet(image, sheetSpec.tileWidth, sheetSpec.tileHeight);
 
-      sheetSpec.tiles.forEach((tileSpec: any) => {
-        sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
-      });
+      if (sheetSpec.tiles) {
+        sheetSpec.tiles.forEach((tileSpec: any) => {
+          sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
+        });
+      }
 
-      return sprites;
-    });
-}
+      if (sheetSpec.frames) {
+        sheetSpec.frames.forEach((frameSpec: any) => {
+          sprites.define(frameSpec.name, ...frameSpec.rect);
+        });
+      }
 
-export function loadMarioSprite() {
-  return loadImage(characters)
-    .then((image: HTMLImageElement) => {
-      const sprites = new SpriteSheet(image, 16, 16);
-      sprites.define('idle', 276, 44, 16, 16);
       return sprites;
     });
 }
