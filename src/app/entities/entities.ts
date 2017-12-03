@@ -12,7 +12,7 @@ export function createMario(): Promise<Entity> {
     mario.addTrait(new Jump());
 
     mario.draw = function drawMario(context: CanvasRenderingContext2D) {
-      sprite.draw('idle', context, this.position.x, this.position.y);
+      sprite.draw('idle', context, 0, 0);
     };
 
     return mario;

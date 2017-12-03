@@ -1,31 +1,39 @@
 import { SpriteSheet } from '../sprites/sprite-sheet';
 import { Entity } from '../entities/entity';
 import { Level } from '../levels/level';
+import { Camera } from '../camera';
+import { CanvasHelper } from '../canvas-helper';
 
-export function createBackgroundLayer(level: Level, backgroundSprites: SpriteSheet) {
-  const buffer = document.createElement('canvas');
-  const context = buffer.getContext('2d');
-  buffer.width = 256;
-  buffer.height = 240;
+export function createBackgroundLayer(level: Level, backgroundSprites: SpriteSheet): (context: CanvasRenderingContext2D, camera: Camera) => void {
+  const canvasHelper = new CanvasHelper(2048, 240);
 
   level.tiles.forEachTile((tile: any, x: number, y: number) => {
-    backgroundSprites.drawTile(tile.name, context, x, y);
+    backgroundSprites.drawTile(tile.name, canvasHelper.context, x, y);
   });
 
-  return function drawBackgroundLayer(context: CanvasRenderingContext2D) {
-    context.drawImage(buffer, 0, 0);
+  return function drawLayer(context: CanvasRenderingContext2D, camera: Camera) {
+    context.drawImage(canvasHelper.buffer, -camera.position.x, -camera.position.y);
   }
 }
 
-export function createSpriteLayer(entities: Set<Entity>) {
-  return function drawSpriteLayer(context: CanvasRenderingContext2D) {
+export function createSpriteLayer(entities: Set<Entity>, width: number = 64, height: number = 64): (context: CanvasRenderingContext2D, camera: Camera) => void {
+  const spriteCanvas = new CanvasHelper(width, height);
+  return function drawLayer(mainContext: CanvasRenderingContext2D, camera: Camera) {
     entities.forEach((entity: Entity) => {
-      entity.draw(context);
+      // clear the spriteCanvas context
+      spriteCanvas.context.clearRect(0, 0, width, height);
+
+      entity.draw(spriteCanvas.context);
+
+      mainContext.drawImage(
+        spriteCanvas.buffer,
+        entity.position.x - camera.position.x,
+        entity.position.y - camera.position.y);
     });
   }
 }
 
-export function createCollisionLayer(level: Level) {
+export function createCollisionLayer(level: Level): (context: CanvasRenderingContext2D, camera: Camera) => void {
   const resolvedTiles: any[] = [];
 
   const tileResolver = level.tileCollider.tiles;
@@ -38,18 +46,24 @@ export function createCollisionLayer(level: Level) {
     return getByIndexOriginal.call(tileResolver, x, y);
   };
 
-  return function drawCollision(context: CanvasRenderingContext2D) {
+  return function drawLayer(context: CanvasRenderingContext2D, camera: Camera) {
     context.strokeStyle = 'blue';
     resolvedTiles.forEach(({ x, y }) => {
       context.beginPath();
-      context.rect(x * tileSize, y * tileSize, tileSize, tileSize);
+      context.rect(
+        x * tileSize - camera.position.x,
+        y * tileSize - camera.position.y,
+        tileSize, tileSize);
       context.stroke();
     });
 
     context.strokeStyle = 'red';
-    level.entities.forEach((entity:Entity)=>{
+    level.entities.forEach((entity: Entity) => {
       context.beginPath();
-      context.rect(entity.position.x, entity.position.y, entity.size.x, entity.size.y);
+      context.rect(
+        entity.position.x - camera.position.x,
+        entity.position.y - camera.position.y,
+        entity.size.x, entity.size.y);
       context.stroke();
     });
 

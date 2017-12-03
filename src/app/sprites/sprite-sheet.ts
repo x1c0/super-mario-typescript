@@ -1,3 +1,5 @@
+import { CanvasHelper } from '../canvas-helper';
+
 export class SpriteSheet {
 
   image: HTMLImageElement;
@@ -13,17 +15,14 @@ export class SpriteSheet {
   }
 
   define(name: string, x: number, y: number, width: number, height: number) {
-    const buffer: HTMLCanvasElement = <HTMLCanvasElement>document.createElement('canvas');
-    buffer.width = width;
-    buffer.height = height;
-    buffer
-      .getContext('2d')
-      .drawImage(this.image,
-        x, y,
-        width, height,
-        0, 0,
-        width, height);
-    this.tiles.set(name, buffer);
+    const canvasHelper = new CanvasHelper(width, height);
+    canvasHelper.context.drawImage(
+      this.image,
+      x, y,
+      width, height,
+      0, 0,
+      width, height);
+    this.tiles.set(name, canvasHelper.buffer);
   }
 
   defineTile(name: string, x: number, y: number) {

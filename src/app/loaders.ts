@@ -26,14 +26,31 @@ function loadLevelSpec(levelName: string): Promise<LevelSpec> {
 }
 
 function createTiles(level: any, backgrounds: Background[]) {
+
+  function applyRange(background: Background, xStart: number, xLen: number, yStart: number, yLen: number) {
+    const xEnd = xStart + xLen;
+    const yEnd = yStart + yLen;
+
+    for (let x = xStart; x < xEnd; x++) {
+      for (let y = yStart; y < yEnd; y++) {
+        level.tiles.set(x, y, {
+          name: background.tile
+        });
+      }
+    }
+  }
+
   backgrounds.forEach((background: Background) => {
-    background.ranges.forEach(([x1, x2, y1, y2]) => {
-      for (let x = x1; x < x2; x++) {
-        for (let y = y1; y < y2; y++) {
-          level.tiles.set(x, y, {
-            name: background.tile
-          });
-        }
+    background.ranges.forEach((range) => {
+      if (range.length === 4) {
+        const [xStar, xLen, yStart, yLen] = range;
+        applyRange(background, xStar, xLen, yStart, yLen);
+      } else if (range.length === 3) {
+        const [xStar,xLen, yStart] = range;
+        applyRange(background, xStar, xLen, yStart, 1);
+      } else if (range.length === 2) {
+        const [xStar, yStart] = range;
+        applyRange(background, xStar, 1, yStart, 1);
       }
     });
   });
