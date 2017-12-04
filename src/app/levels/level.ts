@@ -17,7 +17,7 @@ export class Level {
     this.entities = new Set();
     this.tiles = new Matrix();
     this.tileCollider = new TileCollider(this.tiles);
-    this.gravity = 2000;
+    this.gravity = 1500;
     this.totalTime = 0;
   }
 

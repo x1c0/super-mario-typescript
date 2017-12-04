@@ -3,9 +3,8 @@ import { loadLevel } from './loaders';
 import { createMario } from './entities/entities';
 import { startTimer } from './timer';
 import { setupKeyboard } from './input';
-import { createCameraLayer, createCollisionLayer } from './layers/layers';
+import { createCameraLayer } from './layers/layers';
 import { Camera } from './camera';
-import { setupMouseControls } from './debug';
 
 const canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('screen');
 const context: CanvasRenderingContext2D = canvas.getContext('2d');
@@ -26,10 +25,13 @@ Promise.all([
     const input = setupKeyboard(mario);
     input.listenTo(window);
 
-    setupMouseControls(canvas, mario, camera);
-
     const update = function update(deltaTime: number) {
       level.update(deltaTime);
+
+      if (mario.position.x > 100) {
+        camera.position.x = mario.position.x - 100;
+      }
+
       level.compositor.draw(context, camera);
     };
 

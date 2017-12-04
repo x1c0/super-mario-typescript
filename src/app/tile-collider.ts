@@ -1,5 +1,5 @@
 import { Matrix } from './math/matrix';
-import { Entity } from './entities/entity';
+import { Entity, Sides } from './entities/entity';
 import { TileResolver } from './tile-resolver';
 
 export class TileCollider {
@@ -66,11 +66,15 @@ export class TileCollider {
         if (entity.position.y + entity.size.y > match.y1) {
           entity.position.y = match.y1 - entity.size.y;
           entity.velocity.y = 0;
+
+          entity.obstruct(Sides.BOTTOM);
         }
       } else if (entity.velocity.y < 0) {
         if (entity.position.y < match.y2) {
           entity.position.y = match.y2;
           entity.velocity.y = 0;
+
+          entity.obstruct(Sides.TOP);
         }
       }
     });

@@ -1,6 +1,13 @@
 import { Vector } from '../math/vector';
 import { Trait } from '../traits/trait';
 
+
+export const Sides = {
+  TOP: Symbol('top'),
+  BOTTOM: Symbol('bottom'),
+};
+
+
 export class Entity {
 
   position: Vector;
@@ -19,6 +26,12 @@ export class Entity {
   addTrait(trait: Trait) {
     this.traits.push(trait);
     this[trait.name] = trait;
+  }
+
+  obstruct(side: Symbol) {
+    this.traits.forEach((trait: Trait) => {
+      trait.obstruct(this, side);
+    });
   }
 
   update(deltaTime: number): void {
