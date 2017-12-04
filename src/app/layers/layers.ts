@@ -11,11 +11,6 @@ export function createBackgroundLayer(level: Level, backgroundSprites: SpriteShe
   let endIndex: number;
 
   function redraw(drawFrom: number, drawTo: number) {
-
-    if (drawFrom === startIndex && drawTo === endIndex) {
-      return;
-    }
-
     startIndex = drawFrom;
     endIndex = drawTo;
 
@@ -23,7 +18,11 @@ export function createBackgroundLayer(level: Level, backgroundSprites: SpriteShe
       const col = level.tiles.grid[x];
       if (col) {
         col.forEach((tile: any, y: number) => {
-          backgroundSprites.drawTile(tile.name, canvasHelper.context, x - startIndex, y);
+          if (backgroundSprites.animations.has(tile.name)) {
+            backgroundSprites.drawAnimation(tile.name, canvasHelper.context, x - startIndex, y, level.totalTime);
+          } else {
+            backgroundSprites.drawTile(tile.name, canvasHelper.context, x - startIndex, y);
+          }
         });
       }
     }

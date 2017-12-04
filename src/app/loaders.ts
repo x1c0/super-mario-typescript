@@ -1,7 +1,7 @@
 import { Level } from './levels/level';
 import { createBackgroundLayer, createSpriteLayer } from './layers/layers';
 import { SpriteSheet } from './sprite-sheet';
-import characters from './sprites/characters.gif';
+import { createAnimation } from './animation';
 
 export interface Background {
   tile: string,
@@ -79,6 +79,13 @@ export function loadSpriteSheet(name: string) {
       if (sheetSpec.frames) {
         sheetSpec.frames.forEach((frameSpec: any) => {
           sprites.define(frameSpec.name, ...frameSpec.rect);
+        });
+      }
+
+      if (sheetSpec.animations) {
+        sheetSpec.animations.forEach((animationSpec: any) => {
+          const animation = createAnimation(animationSpec.frames, animationSpec.frameLength);
+          sprites.defineAnimation(animationSpec.name, animation);
         });
       }
 
