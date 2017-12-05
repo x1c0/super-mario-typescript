@@ -1,17 +1,17 @@
 {
   "spriteSheet": "overworld",
-  "backgrounds": [
+  "tiles": [
     {
-      "tile": "sky",
+      "name": "sky",
       "ranges": [[0, 212, 0, 13]]
     },
     {
-      "tile": "ground",
+      "name": "ground",
       "type": "ground",
       "ranges": [[0, 212, 13, 2]]
     },
     {
-      "tile": "sky",
+      "name": "sky",
       "ranges": [
         [75, 2, 13, 2],
         [92, 2, 13, 2],
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "tile": "ground",
+      "name": "ground",
       "type": "ground",
       "ranges": [
         [5, 3, 9, 1],
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "tile": "bricks",
+      "name": "bricks",
       "type": "ground",
       "ranges": [
         [27, 5, 9],
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "tile": "chance",
+      "name": "chance",
       "type": "ground",
       "ranges": [
         [2, 2],
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "tile": "chocolate",
+      "name": "chocolate",
       "type": "ground",
       "ranges": [
         [141, 1, 9],
@@ -97,6 +97,122 @@
         [185, 8, 11],
         [184, 9, 12]
       ]
+    },
+    {
+      "pattern": "pipe-2h",
+      "ranges": [
+        [35, 11],
+        [167, 11],
+        [182, 11]
+      ]
+    },
+    {
+      "pattern": "pipe-3h",
+      "ranges": [
+        [45, 10]
+      ]
+    },
+    {
+      "pattern": "pipe-4h",
+      "ranges": [
+        [53, 9],
+        [64, 9]
+      ]
     }
-  ]
+  ],
+  "patterns": {
+    "pipe-section-vert": {
+      "tiles": [
+        {
+          "name": "pipe-vert-left",
+          "type": "ground",
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "name": "pipe-vert-right",
+          "type": "ground",
+          "ranges": [
+            [1, 0]
+          ]
+        }
+      ]
+    },
+    "pipe-cap-vert": {
+      "tiles": [
+        {
+          "name": "pipe-insert-vert-left",
+          "type": "ground",
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "name": "pipe-insert-vert-right",
+          "type": "ground",
+          "ranges": [
+            [1, 0]
+          ]
+        }
+      ]
+    },
+    "pipe-2h": {
+      "tiles": [
+        {
+          "pattern": "pipe-cap-vert",
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "pattern": "pipe-section-vert",
+          "ranges": [
+            [
+              0, 1,
+              1, 1
+            ]
+          ]
+        }
+      ]
+    },
+    "pipe-3h": {
+      "tiles": [
+        {
+          "pattern": "pipe-cap-vert",
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "pattern": "pipe-section-vert",
+          "ranges": [
+            [
+              0, 1,
+              1, 2
+            ]
+          ]
+        }
+      ]
+    },
+    "pipe-4h": {
+      "tiles": [
+        {
+          "pattern": "pipe-cap-vert",
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "pattern": "pipe-section-vert",
+          "ranges": [
+            [
+              0, 1,
+              1, 3
+            ]
+          ]
+        }
+      ]
+    }
+  }
 }

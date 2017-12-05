@@ -3,15 +3,25 @@ import { createBackgroundLayer, createSpriteLayer } from './layers/layers';
 import { SpriteSheet } from './sprite-sheet';
 import { createAnimation } from './animation';
 
-export interface Background {
-  tile: string,
+export interface Tile {
+  name: string,
   type: string,
+  pattern: string,
   ranges: [[number, number, number, number]]
+}
+
+export interface PatternValue {
+  tiles: Tile[]
+}
+
+export interface PatternKey {
+  [key: string]: PatternValue
 }
 
 export interface LevelSpec {
   spriteSheet: string,
-  backgrounds: Background[]
+  tiles: Tile[],
+  patterns: PatternKey
 }
 
 export function loadImage(imgPath: string): Promise<HTMLImageElement> {
@@ -26,38 +36,6 @@ export function loadImage(imgPath: string): Promise<HTMLImageElement> {
 function loadLevelSpec(levelName: string): Promise<LevelSpec> {
   return fetch(`/levels/${levelName}.json`)
     .then(response => response.json());
-}
-
-function createTiles(level: any, backgrounds: Background[]) {
-
-  function applyRange(background: Background, xStart: number, xLen: number, yStart: number, yLen: number) {
-    const xEnd = xStart + xLen;
-    const yEnd = yStart + yLen;
-
-    for (let x = xStart; x < xEnd; x++) {
-      for (let y = yStart; y < yEnd; y++) {
-        level.tiles.set(x, y, {
-          name: background.tile,
-          type: background.type
-        });
-      }
-    }
-  }
-
-  backgrounds.forEach((background: Background) => {
-    background.ranges.forEach((range) => {
-      if (range.length === 4) {
-        const [xStar, xLen, yStart, yLen] = range;
-        applyRange(background, xStar, xLen, yStart, yLen);
-      } else if (range.length === 3) {
-        const [xStar, xLen, yStart] = range;
-        applyRange(background, xStar, xLen, yStart, 1);
-      } else if (range.length === 2) {
-        const [xStar, yStart] = range;
-        applyRange(background, xStar, 1, yStart, 1);
-      }
-    });
-  });
 }
 
 export function loadSpriteSheet(name: string) {
@@ -103,7 +81,7 @@ export function loadLevel(levelName: string): Promise<Level> {
     .then(([levelSpec, backgroundSprites]) => {
       const level = new Level();
 
-      createTiles(level, levelSpec.backgrounds);
+      createTiles(level, levelSpec.tiles, levelSpec.patterns);
 
       const backgroundLayer = createBackgroundLayer(level, backgroundSprites);
       level.compositor.addLayer(backgroundLayer);
@@ -113,4 +91,46 @@ export function loadLevel(levelName: string): Promise<Level> {
 
       return level;
     });
+}
+
+function createTiles(level: Level, tiles: Tile[], patterns: PatternKey, offsetX: number = 0, offsetY: number = 0) {
+
+  function applyRange(tile: Tile, xStart: number, xLen: number, yStart: number, yLen: number) {
+    const xEnd = xStart + xLen;
+    const yEnd = yStart + yLen;
+
+    for (let x = xStart; x < xEnd; x++) {
+      for (let y = yStart; y < yEnd; y++) {
+        const derivedX = x + offsetX;
+        const derivedY = y + offsetY;
+
+        if (tile.pattern) {
+          const tiles = patterns[tile.pattern].tiles;
+          createTiles(level, tiles, patterns, derivedX, derivedY);
+        } else {
+          level.tiles.set(
+            derivedX,
+            derivedY, {
+              name: tile.name,
+              type: tile.type
+            });
+        }
+      }
+    }
+  }
+
+  tiles.forEach((tile: Tile) => {
+    tile.ranges.forEach((range) => {
+      if (range.length === 4) {
+        const [xStar, xLen, yStart, yLen] = range;
+        applyRange(tile, xStar, xLen, yStart, yLen);
+      } else if (range.length === 3) {
+        const [xStar, xLen, yStart] = range;
+        applyRange(tile, xStar, xLen, yStart, 1);
+      } else if (range.length === 2) {
+        const [xStar, yStart] = range;
+        applyRange(tile, xStar, 1, yStart, 1);
+      }
+    });
+  });
 }
