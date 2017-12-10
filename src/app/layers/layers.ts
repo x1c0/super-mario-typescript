@@ -86,8 +86,8 @@ export function createCollisionLayer(level: Level): (context: CanvasRenderingCon
     level.entities.forEach((entity: Entity) => {
       context.beginPath();
       context.rect(
-        entity.position.x - camera.position.x,
-        entity.position.y - camera.position.y,
+        entity.bounds.left - camera.position.x,
+        entity.bounds.top - camera.position.y,
         entity.size.x, entity.size.y);
       context.stroke();
     });

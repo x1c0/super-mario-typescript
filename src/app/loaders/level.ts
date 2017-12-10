@@ -42,7 +42,6 @@ export function loadLevel(levelName: string): Promise<Level> {
         return mergedTiles.concat(layer.tiles);
       }, []);
 
-      console.log(mergedTiles);
       const collisionGrid = createCollisionGrid(mergedTiles, levelSpec.patterns);
       level.setCollisionGrid(collisionGrid);
 
