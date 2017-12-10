@@ -1,10 +1,9 @@
 import '../styles/main.scss';
-import { loadLevel } from './loaders';
 import { createMario } from './entities/entities';
 import { startTimer } from './timer';
 import { setupKeyboard } from './input';
-import { createCameraLayer } from './layers/layers';
 import { Camera } from './camera';
+import { loadLevel } from './loaders/level';
 
 const canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('screen');
 const context: CanvasRenderingContext2D = canvas.getContext('2d');
@@ -19,7 +18,7 @@ Promise.all([
     mario.position.set(64, 64);
 
     // debug layer -> level.compositor.addLayer(createCollisionLayer(level));
-    level.compositor.addLayer(createCameraLayer(camera));
+    // level.compositor.addLayer(createCameraLayer(camera));
     level.entities.add(mario);
 
     const input = setupKeyboard(mario);

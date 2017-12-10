@@ -3,19 +3,18 @@ import { Entity } from '../entities/entity';
 import { Level } from '../levels/level';
 import { Camera } from '../camera';
 import { CanvasHelper } from '../canvas-helper';
+import { TileResolver } from '../tile-resolver';
+import { Matrix } from '../math/matrix';
 
-export function createBackgroundLayer(level: Level, backgroundSprites: SpriteSheet): (context: CanvasRenderingContext2D, camera: Camera) => void {
+export function createBackgroundLayer(level: Level, tiles: Matrix, backgroundSprites: SpriteSheet): (context: CanvasRenderingContext2D, camera: Camera) => void {
+  const resolver = new TileResolver(tiles);
   const canvasHelper = new CanvasHelper(256 + 16, 240);
-  const resolver = level.tileCollider.tiles;
-  let startIndex: number;
-  let endIndex: number;
 
-  function redraw(drawFrom: number, drawTo: number) {
-    startIndex = drawFrom;
-    endIndex = drawTo;
-
+  function redraw(startIndex: number, endIndex: number) {
+    canvasHelper.context.clearRect(0, 0, canvasHelper.buffer.width, canvasHelper.buffer.height);
+    
     for (let x = startIndex; x <= endIndex; x++) {
-      const col = level.tiles.grid[x];
+      const col = tiles.grid[x];
       if (col) {
         col.forEach((tile: any, y: number) => {
           if (backgroundSprites.animations.has(tile.name)) {

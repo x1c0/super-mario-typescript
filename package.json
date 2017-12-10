@@ -24,5 +24,8 @@
     "typescript": "^2.6.1",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
+  },
+  "dependencies": {
+    "tslib": "^1.8.0"
   }
 }

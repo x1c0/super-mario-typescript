@@ -4,8 +4,17 @@
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "importHelpers": true,
     "sourceMap": true,
-    "lib": ["es5", "es6", "es7", "dom"]
+    "lib": [
+      "es5",
+      "es6",
+      "es7",
+      "dom",
+      "es2015.collection",
+      "es2015.iterable"]
   },
   "exclude": [
     "node_modules"

@@ -7,7 +7,6 @@ export class Level {
 
   compositor: LayerCompositor;
   entities: Set<Entity>;
-  tiles: Matrix;
   tileCollider: TileCollider;
   gravity: number;
   totalTime: number;
@@ -15,10 +14,13 @@ export class Level {
   constructor() {
     this.compositor = new LayerCompositor();
     this.entities = new Set();
-    this.tiles = new Matrix();
-    this.tileCollider = new TileCollider(this.tiles);
+    this.tileCollider = null;
     this.gravity = 1500;
     this.totalTime = 0;
+  }
+
+  setCollisionGrid(matrix: Matrix) {
+    this.tileCollider = new TileCollider(matrix);
   }
 
   update(deltaTime: number) {
