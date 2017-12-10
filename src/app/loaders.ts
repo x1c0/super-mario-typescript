@@ -15,7 +15,7 @@ export function loadJSON(url: string): Promise<any> {
     .then(response => response.json());
 }
 
-export function loadSpriteSheet(name: string) {
+export function loadSpriteSheet(name: string): Promise<SpriteSheet> {
   return loadJSON(`/sprites/${name}.json`)
     .then((sheetSpec: any) => Promise.all([
       sheetSpec,
