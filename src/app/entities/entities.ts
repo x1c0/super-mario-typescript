@@ -2,7 +2,7 @@ import { loadKoopa } from './koopa';
 import { loadMario } from './mario';
 import { loadGoomba } from './goomba';
 
-export function loadEntities() {
+export function loadEntities(): Promise<any> {
   const entityFactories: any = {};
 
   function addAs(name: string) {

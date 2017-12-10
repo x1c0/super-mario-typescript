@@ -23,10 +23,16 @@ export interface Layer {
   tiles: Tile[]
 }
 
+export interface EntitySpec {
+  name: string,
+  position: [number, number]
+}
+
 export interface LevelSpec {
   spriteSheet: string,
   layers: Layer[],
-  patterns: PatternKey
+  patterns: PatternKey,
+  entities: EntitySpec[]
 }
 
 function setupLevelCollision(levelSpec: LevelSpec, level: Level) {
@@ -46,27 +52,35 @@ function setupBackground(levelSpec: LevelSpec, level: Level, backgroundSprites: 
   });
 }
 
-function setupEntities(level: Level) {
+function setupEntities(levelSpec: LevelSpec, level: Level, entityFactory: any) {
+  levelSpec.entities.forEach(({ name, position: [x, y] }: EntitySpec) => {
+    const createEntity = entityFactory[name];
+    const entity = createEntity();
+    entity.position.set(x, y);
+    level.entities.add(entity);
+  });
   const spriteLayer = createSpriteLayer(level.entities);
   level.compositor.addLayer(spriteLayer);
 }
 
-export function loadLevel(levelName: string): Promise<Level> {
-  return loadJSON(`/levels/${levelName}.json`)
-    .then((levelSpec: LevelSpec) =>
-      Promise.all([
-        levelSpec,
-        loadSpriteSheet(levelSpec.spriteSheet)
-      ]))
-    .then(([levelSpec, backgroundSprites]) => {
-      const level = new Level();
+export function createLevelLoader(entityFactory: any): (levelName: string) => Promise<Level> {
+  return function loadLevel(levelName: string): Promise<Level> {
+    return loadJSON(`/levels/${levelName}.json`)
+      .then((levelSpec: LevelSpec) =>
+        Promise.all([
+          levelSpec,
+          loadSpriteSheet(levelSpec.spriteSheet)
+        ]))
+      .then(([levelSpec, backgroundSprites]) => {
+        const level = new Level();
 
-      setupLevelCollision(levelSpec, level);
-      setupBackground(levelSpec, level, backgroundSprites);
-      setupEntities(level);
+        setupLevelCollision(levelSpec, level);
+        setupBackground(levelSpec, level, backgroundSprites);
+        setupEntities(levelSpec, level, entityFactory);
 
-      return level;
-    });
+        return level;
+      });
+  }
 }
 
 function createCollisionGrid(tiles: Tile[], patterns: PatternKey) {

@@ -279,5 +279,15 @@
         }
       ]
     }
-  }
+  },
+  "entities": [
+    {
+      "name": "koopa",
+      "position": [260, 0]
+    },
+    {
+      "name": "goomba",
+      "position": [220, 0]
+    }
+  ]
 }
