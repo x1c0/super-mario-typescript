@@ -28,7 +28,6 @@ export class Entity {
   [key: string]: any;
   lifeTime: number;
   bounds: BoundingBox;
-  canCollide: boolean;
 
   constructor() {
     this.position = new Vector(0, 0);
@@ -38,7 +37,6 @@ export class Entity {
     this.traits = [];
     this.lifeTime = 0;
     this.bounds = new BoundingBox(this.position, this.size, this.offset);
-    this.canCollide = true;
   }
 
   addTrait(trait: Trait) {
@@ -52,9 +50,7 @@ export class Entity {
     });
   }
 
-  draw(context: CanvasRenderingContext2D) {
-
-  }
+  draw(context: CanvasRenderingContext2D) {}
 
   finalize() {
     this.traits.forEach((trait: Trait) => {
@@ -62,9 +58,9 @@ export class Entity {
     });
   }
 
-  obstruct(side: Side) {
+  obstruct(side: Side, match: any) {
     this.traits.forEach((trait: Trait) => {
-      trait.obstruct(this, side);
+      trait.obstruct(this, side, match);
     });
   }
 

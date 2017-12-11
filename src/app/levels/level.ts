@@ -31,22 +31,16 @@ export class Level {
       entity.update(deltaTime, this);
 
       entity.position.x += entity.velocity.x * deltaTime;
-      if (entity.canCollide) {
-        this.tileCollider.checkX(entity);
-      }
+      this.tileCollider.checkX(entity);
 
       entity.position.y += entity.velocity.y * deltaTime;
-      if (entity.canCollide) {
-        this.tileCollider.checkY(entity);
-      }
+      this.tileCollider.checkY(entity);
 
       entity.velocity.y += this.gravity * deltaTime;
     });
 
     this.entities.forEach((entity: Entity) => {
-      if (entity.canCollide) {
-        this.entityColider.check(entity);
-      }
+      this.entityColider.check(entity);
     });
 
     this.entities.forEach((entity: Entity) => {

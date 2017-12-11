@@ -31,17 +31,11 @@ export class TileCollider {
 
       if (entity.velocity.x > 0) {
         if (entity.bounds.right > match.x1) {
-          entity.bounds.right = match.x1;
-          entity.velocity.x = 0;
-
-          entity.obstruct(Side.Right);
+          entity.obstruct(Side.Right, match);
         }
       } else if (entity.velocity.x < 0) {
         if (entity.bounds.left < match.x2) {
-          entity.bounds.left = match.x2;
-          entity.velocity.x = 0;
-
-          entity.obstruct(Side.Left);
+          entity.obstruct(Side.Left, match);
         }
       }
     });
@@ -68,17 +62,11 @@ export class TileCollider {
 
       if (entity.velocity.y > 0) {
         if (entity.bounds.bottom > match.y1) {
-          entity.bounds.bottom = match.y1;
-          entity.velocity.y = 0;
-
-          entity.obstruct(Side.Bottom);
+          entity.obstruct(Side.Bottom, match);
         }
       } else if (entity.velocity.y < 0) {
         if (entity.bounds.top < match.y2) {
-          entity.bounds.top = match.y2;
-          entity.velocity.y = 0;
-
-          entity.obstruct(Side.Top);
+          entity.obstruct(Side.Top, match);
         }
       }
     });

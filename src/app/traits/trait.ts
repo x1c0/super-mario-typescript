@@ -24,7 +24,7 @@ export class Trait {
     this.tasks.push(task);
   }
 
-  obstruct(entity: Entity, side: Side) {}
+  obstruct(entity: Entity, side: Side, match: any) {}
 
   collides(us: Entity, them: Entity) {}
 

@@ -63,7 +63,7 @@ export class KoopaBehavior extends Trait {
     } else if (this.state === KoopaState.Hiding) {
       us.killable.kill();
       us.velocity.set(100, -200);
-      us.canCollide = false;
+      us.solid.obstructs = false;
     } else if (this.state === KoopaState.Panic) {
       this.hide(us);
     }
