@@ -1,7 +1,9 @@
 import { loadSpriteSheet } from '../loaders';
 import { SpriteSheet } from '../sprite-sheet';
 import { Entity } from './entity';
-import { PendulumWalk } from '../traits/pendulum-walk';
+import { PendulumMove } from '../traits/pendulum-walk';
+import { GoombaBehavior } from '../traits/goomba-behavior';
+import { Killable } from '../traits/killable';
 
 export function loadGoomba(): Promise<() => Entity> {
   return loadSpriteSheet('goomba')
@@ -12,15 +14,26 @@ function createGoombaFactory(sprite: SpriteSheet) {
 
   const walkAnimation = sprite.animations.get('walk');
 
+  function routeAnimation(goomba: Entity) {
+    if (goomba.killable.dead) {
+      return 'flat';
+    }
+
+    return walkAnimation(goomba.lifeTime);
+  }
+
+
   function drawGoomba(context: CanvasRenderingContext2D) {
-    sprite.draw(walkAnimation(this.lifeTime), context, 0, 0);
+    sprite.draw(routeAnimation(this), context, 0, 0);
   }
 
   return function createGoomba() {
     const goomba = new Entity();
     goomba.size.set(16, 16);
 
-    goomba.addTrait(new PendulumWalk());
+    goomba.addTrait(new PendulumMove());
+    goomba.addTrait(new GoombaBehavior());
+    goomba.addTrait(new Killable());
 
     goomba.draw = drawGoomba;
 

@@ -1,4 +1,4 @@
-import { Entity, Sides } from '../entities/entity';
+import { Entity, Side } from '../entities/entity';
 import { Trait } from './trait';
 
 export class Jump extends Trait {
@@ -35,10 +35,10 @@ export class Jump extends Trait {
     this.requestTime = 0;
   }
 
-  obstruct(entity: Entity, side: Symbol) {
-    if (side === Sides.BOTTOM) {
+  obstruct(entity: Entity, side: Side) {
+    if (side === Side.Bottom) {
       this.ready = 1;
-    } else if (side === Sides.TOP) {
+    } else if (side === Side.Top) {
       this.cancel();
     }
   }

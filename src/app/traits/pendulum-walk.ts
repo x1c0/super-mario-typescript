@@ -1,23 +1,27 @@
-import { Entity, Sides } from '../entities/entity';
+import { Entity, Side } from '../entities/entity';
 import { Trait } from './trait';
 
-export class PendulumWalk extends Trait {
+export class PendulumMove extends Trait {
 
   speed: number;
+  enabled: boolean;
 
   constructor() {
-    super('pendulumWalk');
+    super('pendulumMove');
     this.speed = -30;
+    this.enabled = true;
   }
 
-  obstruct(entity: Entity, side: Symbol) {
-    if (side === Sides.LEFT || side === Sides.RIGHT) {
+  obstruct(entity: Entity, side: Side) {
+    if (side === Side.Left || side === Side.Right) {
       this.speed = -this.speed;
     }
   }
 
   update(entity: Entity) {
-    entity.velocity.x = this.speed;
+    if (this.enabled) {
+      entity.velocity.x = this.speed;
+    }
   }
 
 }

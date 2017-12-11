@@ -1,4 +1,5 @@
-import { Entity } from '../entities/entity';
+import { Entity, Side } from '../entities/entity';
+import { Level } from '../levels/level';
 
 export class Trait {
 
@@ -8,9 +9,9 @@ export class Trait {
     this.name = name;
   }
 
-  obstruct(entity: Entity, side: Symbol) {}
+  obstruct(entity: Entity, side: Side) {}
 
-  update(entity: Entity, deltaTime: number) {
-    console.warn('Unhandled update call in Trait');
-  }
+  collides(us: Entity, them: Entity) {}
+
+  update(entity: Entity, deltaTime: number, level: Level) {}
 }

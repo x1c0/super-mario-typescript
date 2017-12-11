@@ -1,5 +1,5 @@
 import { Matrix } from './math/matrix';
-import { Entity, Sides } from './entities/entity';
+import { Entity, Side } from './entities/entity';
 import { TileResolver } from './tile-resolver';
 
 export class TileCollider {
@@ -34,14 +34,14 @@ export class TileCollider {
           entity.bounds.right = match.x1;
           entity.velocity.x = 0;
 
-          entity.obstruct(Sides.RIGHT);
+          entity.obstruct(Side.Right);
         }
       } else if (entity.velocity.x < 0) {
         if (entity.bounds.left < match.x2) {
           entity.bounds.left = match.x2;
           entity.velocity.x = 0;
 
-          entity.obstruct(Sides.LEFT);
+          entity.obstruct(Side.Left);
         }
       }
     });
@@ -71,14 +71,14 @@ export class TileCollider {
           entity.bounds.bottom = match.y1;
           entity.velocity.y = 0;
 
-          entity.obstruct(Sides.BOTTOM);
+          entity.obstruct(Side.Bottom);
         }
       } else if (entity.velocity.y < 0) {
         if (entity.bounds.top < match.y2) {
           entity.bounds.top = match.y2;
           entity.velocity.y = 0;
 
-          entity.obstruct(Sides.TOP);
+          entity.obstruct(Side.Top);
         }
       }
     });
