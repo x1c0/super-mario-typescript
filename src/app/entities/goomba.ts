@@ -5,6 +5,7 @@ import { PendulumMove } from '../traits/pendulum-walk';
 import { GoombaBehavior } from '../traits/goomba-behavior';
 import { Killable } from '../traits/killable';
 import { Solid } from '../traits/solid';
+import { Physics } from '../traits/physics';
 
 export function loadGoomba(): Promise<() => Entity> {
   return loadSpriteSheet('goomba')
@@ -32,6 +33,7 @@ function createGoombaFactory(sprite: SpriteSheet) {
     const goomba = new Entity();
     goomba.size.set(16, 16);
 
+    goomba.addTrait(new Physics());
     goomba.addTrait(new Solid());
     goomba.addTrait(new PendulumMove());
     goomba.addTrait(new GoombaBehavior());

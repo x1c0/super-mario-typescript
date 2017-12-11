@@ -5,6 +5,7 @@ import { PendulumMove } from '../traits/pendulum-walk';
 import { Killable } from '../traits/killable';
 import { KoopaBehavior, KoopaState } from '../traits/koopa-behavior';
 import { Solid } from '../traits/solid';
+import { Physics } from '../traits/physics';
 
 export function loadKoopa(): Promise<() => Entity> {
   return loadSpriteSheet('koopa')
@@ -38,6 +39,7 @@ function createKoopaFactory(sprite: SpriteSheet) {
     koopa.size.set(16, 16);
     koopa.offset.y = 8;
 
+    koopa.addTrait(new Physics());
     koopa.addTrait(new Solid());
     koopa.addTrait(new PendulumMove());
     koopa.addTrait(new Killable());
