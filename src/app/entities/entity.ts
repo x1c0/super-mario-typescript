@@ -2,6 +2,7 @@ import { Vector } from '../math/vector';
 import { Trait } from '../traits/trait';
 import { BoundingBox } from '../bounding-box';
 import { Level } from '../levels/level';
+import { Match } from '../tile-resolver';
 
 
 /*export const Sides = {
@@ -58,7 +59,7 @@ export class Entity {
     });
   }
 
-  obstruct(side: Side, match: any) {
+  obstruct(side: Side, match: Match) {
     this.traits.forEach((trait: Trait) => {
       trait.obstruct(this, side, match);
     });

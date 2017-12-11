@@ -1,5 +1,6 @@
 import { Entity, Side } from '../entities/entity';
 import { Trait } from './trait';
+import { Match } from '../tile-resolver';
 
 export class Solid extends Trait {
 
@@ -10,7 +11,7 @@ export class Solid extends Trait {
     this.obstructs = true;
   }
 
-  obstruct(entity: Entity, side: Side, match: any) {
+  obstruct(entity: Entity, side: Side, match: Match) {
     if (!this.obstructs) {
       return;
     }

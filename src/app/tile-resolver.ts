@@ -1,6 +1,16 @@
 import { Matrix } from './math/matrix';
 import { Vector } from './math/vector';
 
+export interface Match {
+  tile: {
+    type: string
+  },
+  x1: number,
+  x2: number,
+  y1: number,
+  y2: number
+}
+
 export class TileResolver {
 
   matrix: Matrix;
@@ -26,7 +36,7 @@ export class TileResolver {
     return range;
   }
 
-  getByIndex(indexX: number, indexY: number) {
+  getByIndex(indexX: number, indexY: number): Match {
     const tile = this.matrix.get(indexX, indexY);
     const x1 = indexX * this.tileSize;
     const x2 = x1 + this.tileSize;
@@ -48,8 +58,8 @@ export class TileResolver {
     return this.getByIndex(this.toIndex(position.x), this.toIndex(position.y));
   }
 
-  searchByRange(x1: number, x2: number, y1: number, y2: number) {
-    const matches: any[] = [];
+  searchByRange(x1: number, x2: number, y1: number, y2: number): Match[] {
+    const matches: Match[] = [];
     this.toIndexRange(x1, x2).forEach((indexX: number) => {
       this.toIndexRange(y1, y2).forEach((indexY: number) => {
         const match = this.getByIndex(indexX, indexY);

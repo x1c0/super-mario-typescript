@@ -1,6 +1,6 @@
 import { Matrix } from './math/matrix';
 import { Entity, Side } from './entities/entity';
-import { TileResolver } from './tile-resolver';
+import { Match, TileResolver } from './tile-resolver';
 
 export class TileCollider {
 
@@ -24,7 +24,7 @@ export class TileCollider {
       x, x,
       entity.bounds.top, entity.bounds.bottom);
 
-    matches.forEach((match: any) => {
+    matches.forEach((match: Match) => {
       if (match.tile.type !== 'ground') {
         return;
       }
@@ -55,7 +55,7 @@ export class TileCollider {
       entity.bounds.left, entity.bounds.right,
       y, y);
 
-    matches.forEach((match: any) => {
+    matches.forEach((match: Match) => {
       if (match.tile.type !== 'ground') {
         return;
       }

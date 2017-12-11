@@ -1,5 +1,6 @@
 import { Entity, Side } from '../entities/entity';
 import { Level } from '../levels/level';
+import { Match } from '../tile-resolver';
 
 interface Task {
   (): void
@@ -24,7 +25,7 @@ export class Trait {
     this.tasks.push(task);
   }
 
-  obstruct(entity: Entity, side: Side, match: any) {}
+  obstruct(entity: Entity, side: Side, match: Match) {}
 
   collides(us: Entity, them: Entity) {}
 
