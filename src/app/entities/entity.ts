@@ -56,6 +56,12 @@ export class Entity {
 
   }
 
+  finalize() {
+    this.traits.forEach((trait: Trait) => {
+      trait.finalize();
+    });
+  }
+
   obstruct(side: Side) {
     this.traits.forEach((trait: Trait) => {
       trait.obstruct(this, side);

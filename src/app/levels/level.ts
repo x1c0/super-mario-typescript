@@ -49,6 +49,10 @@ export class Level {
       }
     });
 
+    this.entities.forEach((entity: Entity) => {
+      entity.finalize();
+    });
+
     this.totalTime += deltaTime;
   }
 
