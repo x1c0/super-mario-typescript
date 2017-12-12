@@ -13,6 +13,7 @@
       "es6",
       "es7",
       "dom",
+      "es2017",
       "es2015.collection",
       "es2015.iterable"]
   },

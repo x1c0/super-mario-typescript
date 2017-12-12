@@ -1,8 +1,9 @@
 import { Level } from '../levels/level';
-import { createBackgroundLayer, createSpriteLayer } from '../layers/layers';
 import { loadJSON, loadSpriteSheet } from '../loaders';
 import { Matrix } from '../math/matrix';
 import { SpriteSheet } from '../sprite-sheet';
+import { createSpriteLayer } from '../layers/sprite';
+import { createBackgroundLayer } from '../layers/background';
 
 export interface Tile {
   name: string,
